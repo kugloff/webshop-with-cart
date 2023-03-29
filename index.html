@@ -15,25 +15,34 @@
                     logo
                 </li>
                 <li>
-                    <a href="#">Categories</a>
+                    <a href="#" id="categories">Categories</a>
+                    <aside id="categoriesContent">
+                        <div id="categoriesContainer"></div>
+                    </aside>
                 </li>
                 <li>
-                    <button id="cartButton">Cart (0)</button>
+                    <button id="miniCartButton">cart <span id="totalQty">(0)</span></button>
                 </li>
             </ul>
         </nav>
     </header>
 
-    <aside>
-        kosár tartalma
+    <aside id="miniCartContent">
+        <h2>Items in cart</h2>
+        <hr>
+        <button id="miniCartClose"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-512.png" alt="close icon"></button>
+        <div id="miniCartProducts"></div> 
+        <p id="miniCartTotal"></p>
     </aside>
 
     <main>
-        fő tartalom
+        <div id="productContainer"></div>
     </main>
 
     <footer>
-        <p class="copyright">&copy; 2023 Junior Frontend fejlesztő - Varga Zsófia</p>
+        <p>&copy; 2023 Junior Frontend fejlesztő - Varga Zsófia</p>
     </footer>
+
+<script src="js/app.js"></script>
 </body>
 </html>

@@ -10,14 +10,67 @@ header{
     height: 50px;
     padding: 15px;
 }
+
 header ul li{
     display: inline-block;
     margin-right: 10px;
 }
-#cartButton{
+
+header ul li a{
+    text-decoration: none;
+    color: black;
+}
+
+#categoriesContent{
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    background: pink;
+    width: 200px;
+    padding: 1em;
+    min-height: 100px;
+    visibility: hidden;
+}
+
+#categoriesContent.active{
+    visibility: visible;
+}
+
+.categoryTitle{
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+#miniCartButton{
     position: absolute;
     right: 10px;
     top: 15px;
+}
+
+#miniCartContent{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: greenyellow;
+    width: 400px;
+    padding: 1em;
+    min-height: 200px;
+    transform: translateY(-200vh);
+    transition: transform 400ms ease-in-out;
+}
+
+#miniCartContent.active{
+    transform: translateY(0);
+}
+
+#miniCartClose{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#miniCartClose img{
+    height: 20px;
 }
 
 /* MAIN */
