@@ -6,14 +6,21 @@
 
 /* HEADER */
 header{
-    background: green;
+    background: blue;
     height: 50px;
     padding: 15px;
 }
 
+#logo{
+    width: 25px;
+    position: absolute;
+    left: 15px;
+    top: 10px;
+}
+
 header ul li{
     display: inline-block;
-    margin-right: 10px;
+    margin-left: 20px;
 }
 
 header ul li a{
@@ -25,7 +32,7 @@ header ul li a{
     position: absolute;
     top: 50px;
     left: 50px;
-    background: pink;
+    background: rgb(80, 211, 255);
     width: 200px;
     padding: 1em;
     min-height: 100px;
@@ -76,12 +83,46 @@ header ul li a{
 /* MAIN */
 main{
     min-height: 200px;
-    background: blue;
+    background: white;
+}
+
+#productContainer{
+    padding: 20px 0;
+    text-align: center;
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1em;
+    flex-direction:row;
+    justify-content: center;
+}
+
+#productContainer .item{
+    flex-basis: 30%;
+    border: 1px solid black;
+    width: 200px;
+}
+
+#productContainer .item img{
+    width: 200px;
+}
+
+#productContainer .item h3{
+    padding: .5em;
+}
+
+#productContainer .item p{
+    margin: 15px 0;
+}
+
+#productContainer .item .price{
+    margin: 15px 0;
+    font-size: 1.25em;
+    font-weight: bold;
 }
 
 /* FOOTER */
 footer{
-    background: yellow;
+    background: blue;
     text-align: center;
     height: 50px;
     padding: 15px;
