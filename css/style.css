@@ -1,0 +1,39 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* HEADER */
+header{
+    background: green;
+    height: 50px;
+    padding: 15px;
+}
+header ul li{
+    display: inline-block;
+    margin-right: 10px;
+}
+#cartButton{
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
+
+/* MAIN */
+main{
+    min-height: 200px;
+    background: blue;
+}
+
+/* FOOTER */
+footer{
+    background: yellow;
+    text-align: center;
+    height: 50px;
+    padding: 15px;
+}
+
+footer p{
+    font-size: 16px;
+}
