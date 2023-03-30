@@ -131,10 +131,10 @@ fetch('https://dummyjson.com/products/categories')
     .catch(error => console.log(error));
     
 
-const increaseButton = document.getElementsByClassName('increase-button');
+/*const increaseButton = document.getElementsByClassName('increase-button');
 const decreaseButton = document.getElementsByClassName('decrease-button');
 
-/*for (let i=0;i<increaseButton.length;i++) {
+for (let i=0;i<increaseButton.length;i++) {
     increaseButton[i].addEventListener("click", () => {
         const productId = button.dataset.productId;
 
