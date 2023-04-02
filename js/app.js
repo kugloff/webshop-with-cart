@@ -43,20 +43,22 @@ fetch('https://dummyjson.com/products/categories')
                                 <div class="price">${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</div>
                                 <button class="addToCartBtn" data-product-id="${product.id}">Add to cart</button>
                             </div>`
-                        })                        
+                        })
+
                         let addToCartButtons = document.getElementsByClassName('addToCartBtn')
                         for (const button of addToCartButtons){
                             button.addEventListener('click', ()=>{
                                 const productId = button.dataset.productId;
                                 if (cart[productId] === undefined) {
                                     cart[productId] = 1;
-                                } else {
+                                }
+                                else {
                                     cart[productId]++;
                                 }
-
+                                
                                 let allQty = 0;
                                 for (const productId in cart) {
-                                allQty += cart[productId];
+                                    allQty += cart[productId];
                                 }
                                 totalQty.innerText = `(${allQty})`;
 
@@ -67,6 +69,7 @@ fetch('https://dummyjson.com/products/categories')
                                 else {
                                     cart[productId]++;
                                 }
+
                                 //termék eltávolítása a kosárból(0)
                                 if (cart[productId] <= 1) {
                                     delete cart[productId];
@@ -78,58 +81,45 @@ fetch('https://dummyjson.com/products/categories')
                                 updateCart(cart, data.products);
                             })
                         }
-
-                        function updateCart(cart, categoryProducts) {
-                            let productsToUpdate = miniCartProducts.querySelectorAll('.item');
-                            let total = 0;
-                          
-                            for (const id in cart) {
-                              let price = 0;
-                              let productName = "";
-                              for (const product of categoryProducts) {
-                                if (product.id == id) {
-                                    price = product.price;
-                                    productName = product.title;
-                                    break;
-                                }
-                              }
-                              let subTotal = price * cart[id];
-                              total += subTotal;
-                          
-                              let productToUpdate = Array.from(productsToUpdate).find(p => p.dataset.productId == id);
-                              if (productToUpdate) {
-                                productToUpdate.querySelector('.quantity').textContent = cart[id];
-                              } else {
-                                miniCartProducts.insertAdjacentHTML('beforeend', `
-                                    <div class="item" data-product-id="${id}">
-                                        <h2>${productName}</h2>
-                                        <p>Price: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(price)}</p>
-                                        <p>Subtotal: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(subTotal)}</p>
-                                        <button class="increase-button" data-product-id="${id}"> + </button> 
-                                        <span class="quantity">${cart[id]}</span>
-                                        <button class="decrease-button" data-product-id="${id}"> - </button> 
-                                        <hr>
-                                    </div>
-                                `);
-                              }
-                            }
-                          
-                            let productsToDelete = miniCartProducts.querySelectorAll('.item');
-                            for (const product of productsToDelete) {
-                                if (!cart[product.dataset.productId]) {
-                                    product.remove();
-                                }
-                            }
-                          
-                            miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
-                        }
-                          
                     })
                 })
         })                
     })
     .catch(error => console.log(error));
     
+
+function updateCart(cart, categoryProducts) {
+    miniCartProducts.innerHTML = '';
+    let total = 0;
+    let subTotal = 0;
+    let price = 0;
+    let title = "";
+
+    for (const id in cart){
+        for (const product of categoryProducts) {
+            if (product.id == id) {
+                price = product.price;
+                title = product.title;
+                subTotal = price * cart[id];
+                total += subTotal;
+                break;
+            }
+        }
+
+        miniCartProducts.innerHTML += 
+        `<div class="item" data-product-id="${id}">
+            <h2>${title}</h2>
+            <p>Price: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(price)}</p>
+            <p>Subtotal: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(subTotal)}</p>
+            <button class="increase-button" data-product-id="${id}"> + </button> 
+            <span class="quantity">${cart[id]}</span>
+            <button class="decrease-button" data-product-id="${id}"> - </button> 
+            <hr>
+        </div>`;
+    }
+
+    miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
+}
 
 /*const increaseButton = document.getElementsByClassName('increase-button');
 const decreaseButton = document.getElementsByClassName('decrease-button');
