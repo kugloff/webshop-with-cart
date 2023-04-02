@@ -119,31 +119,47 @@ function updateCart(cart, categoryProducts) {
     }
 
     miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
+
+    const increaseButton = document.getElementsByClassName('increase-button');
+    const decreaseButton = document.getElementsByClassName('decrease-button');
+
+    function increaseAmount(){
+        const increaseButton = document.getElementsByClassName("increase-button");
+        for (let i = 0; i < increaseButton.length; i++) {
+            increaseButton[i].addEventListener("click", (event) => {
+                const id = event.target.dataset.productId;
+                cart[id]++;
+                allQty++;
+                totalQty.innerText = `(${allQty})`;
+                updateCart(cart, categoryProducts);
+            });
+        }
+    }
+      
+    function decreaseAmount() {
+        const decreaseButton = document.getElementsByClassName("decrease-button");
+        for (let i = 0; i < decreaseButton.length; i++) {
+            decreaseButton[i].addEventListener("click", (event) => {
+                const id = event.target.dataset.productId;
+                if (cart[id] > 1) {
+                    cart[id]--;
+                    allQty--;
+                    totalQty.innerText = `(${allQty})`;
+                    updateCart(cart, categoryProducts);
+                }
+                else {
+                    delete cart[id];
+                    allQty--;
+                    totalQty.innerText = `(${allQty})`;
+                    updateCart(cart, categoryProducts);
+                }
+          });
+        }
+    }      
+
+    increaseAmount();
+    decreaseAmount();
 }
-
-/*const increaseButton = document.getElementsByClassName('increase-button');
-const decreaseButton = document.getElementsByClassName('decrease-button');
-
-for (let i=0;i<increaseButton.length;i++) {
-    increaseButton[i].addEventListener("click", () => {
-        const productId = button.dataset.productId;
-
-        cart[productId]++;
-        allQty++;
-        totalQty.innerText = `(${allQty})`;
-        updateCart(cart, data.products);
-    })
-}
-for (let i = 0; i < decreaseButton.length; i++) {
-    decreaseButton[i].addEventListener("click", () => {
-        const productId = button.dataset.productId;
-
-        cart[productId]--;
-        allQty--;
-        totalQty.innerText = `(${allQty})`;
-        updateCart(cart, data.products);
-    })
-}*/
 
 miniCartButton.addEventListener('click', () => {
     miniCartContent.classList.toggle('active');
