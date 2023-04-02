@@ -43,7 +43,7 @@ fetch('https://dummyjson.com/products/categories')
                                 <div class="price">${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</div>
                                 <button class="addToCartBtn" data-product-id="${product.id}">Add to cart</button>
                             </div>`
-                        })
+                        })                      
 
                         let addToCartButtons = document.getElementsByClassName('addToCartBtn')
                         for (const button of addToCartButtons){
@@ -58,7 +58,7 @@ fetch('https://dummyjson.com/products/categories')
                                 allQty++;
                                 totalQty.innerText = `(${allQty})`;
                               
-                                updateCart(cart, data.products);
+                                updateCart(data.products);
                             }); 
                         }
                     })
@@ -68,13 +68,47 @@ fetch('https://dummyjson.com/products/categories')
     .catch(error => console.log(error));
     
 
-function updateCart(cart, categoryProducts) {
+function increaseAmount(categoryProducts) {
+    const increaseButton = document.getElementsByClassName('increase-button');
+     for (let i = 0; i < increaseButton.length; i++) {
+        increaseButton[i].addEventListener('click', (event) => {
+            const id = event.target.dataset.productId;
+            cart[id]++;
+            allQty++;
+            totalQty.innerText = `(${allQty})`;
+            updateCart(categoryProducts);
+        });
+    }
+}      
+            
+function decreaseAmount(categoryProducts) {
+    const decreaseButton = document.getElementsByClassName('decrease-button');
+    for (let i = 0; i < decreaseButton.length; i++) {
+        decreaseButton[i].addEventListener('click', (event) => {
+            const id = event.target.dataset.productId;
+            if (cart[id] > 1) {
+                cart[id]--;
+                allQty--;
+                totalQty.innerText = `(${allQty})`;
+                updateCart(categoryProducts);
+            }
+            else {
+                delete cart[id];
+                allQty--;
+                totalQty.innerText = `(${allQty})`;
+                updateCart(categoryProducts);
+            }
+        });
+    }
+}
+      
+function updateCart(categoryProducts) {
     miniCartProducts.innerHTML = '';
     let total = 0;
     let subTotal = 0;
     let price = 0;
     let title = "";
-
+      
     for (const id in cart){
         for (const product of categoryProducts) {
             if (product.id == id) {
@@ -85,7 +119,7 @@ function updateCart(cart, categoryProducts) {
                 break;
             }
         }
-
+      
         miniCartProducts.innerHTML += 
         `<div class="item" data-product-id="${id}">
             <h2>${title}</h2>
@@ -97,45 +131,13 @@ function updateCart(cart, categoryProducts) {
             <hr>
         </div>`;
     }
-
-    miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
-
-    function increaseAmount() {
-        const increaseButton = document.getElementsByClassName('increase-button');
-        for (let i = 0; i < increaseButton.length; i++) {
-            increaseButton[i].addEventListener('click', (event) => {
-                const id = event.target.dataset.productId;
-                cart[id]++;
-                allQty++;
-                totalQty.innerText = `(${allQty})`;
-                updateCart(cart, categoryProducts);
-            });
-        }
-    }      
       
-    function decreaseAmount() {
-        const decreaseButton = document.getElementsByClassName('decrease-button');
-        for (let i = 0; i < decreaseButton.length; i++) {
-            decreaseButton[i].addEventListener('click', (event) => {
-                const id = event.target.dataset.productId;
-                if (cart[id] > 1) {
-                    cart[id]--;
-                    allQty--;
-                    totalQty.innerText = `(${allQty})`;
-                    updateCart(cart, categoryProducts);
-                } else {
-                    delete cart[id];
-                    allQty--;
-                    totalQty.innerText = `(${allQty})`;
-                    updateCart(cart, categoryProducts);
-                }
-            });
-        }
-    }
-
-    increaseAmount();
-    decreaseAmount();
+    miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
+      
+    increaseAmount(categoryProducts);
+    decreaseAmount(categoryProducts);
 }
+      
 
 miniCartButton.addEventListener('click', () => {
     miniCartContent.classList.toggle('active');
