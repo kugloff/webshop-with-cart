@@ -47,39 +47,19 @@ fetch('https://dummyjson.com/products/categories')
 
                         let addToCartButtons = document.getElementsByClassName('addToCartBtn')
                         for (const button of addToCartButtons){
-                            button.addEventListener('click', ()=>{
+                            button.addEventListener('click', () => {
                                 const productId = button.dataset.productId;
                                 if (cart[productId] === undefined) {
                                     cart[productId] = 1;
-                                }
-                                else {
+                                } else {
                                     cart[productId]++;
                                 }
-                                
-                                let allQty = 0;
-                                for (const productId in cart) {
-                                    allQty += cart[productId];
-                                }
+                              
+                                allQty++;
                                 totalQty.innerText = `(${allQty})`;
-
-                                //termék hozzáadása a kosárhoz
-                                if (cart[productId] === undefined) {
-                                    cart[productId] = 1;
-                                }
-                                else {
-                                    cart[productId]++;
-                                }
-
-                                //termék eltávolítása a kosárból(0)
-                                if (cart[productId] <= 1) {
-                                    delete cart[productId];
-                                }
-                                else {
-                                    cart[productId]--;
-                                }
-
+                              
                                 updateCart(cart, data.products);
-                            })
+                            }); 
                         }
                     })
                 })
@@ -120,13 +100,10 @@ function updateCart(cart, categoryProducts) {
 
     miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
 
-    const increaseButton = document.getElementsByClassName('increase-button');
-    const decreaseButton = document.getElementsByClassName('decrease-button');
-
-    function increaseAmount(){
-        const increaseButton = document.getElementsByClassName("increase-button");
+    function increaseAmount() {
+        const increaseButton = document.getElementsByClassName('increase-button');
         for (let i = 0; i < increaseButton.length; i++) {
-            increaseButton[i].addEventListener("click", (event) => {
+            increaseButton[i].addEventListener('click', (event) => {
                 const id = event.target.dataset.productId;
                 cart[id]++;
                 allQty++;
@@ -134,28 +111,27 @@ function updateCart(cart, categoryProducts) {
                 updateCart(cart, categoryProducts);
             });
         }
-    }
+    }      
       
     function decreaseAmount() {
-        const decreaseButton = document.getElementsByClassName("decrease-button");
+        const decreaseButton = document.getElementsByClassName('decrease-button');
         for (let i = 0; i < decreaseButton.length; i++) {
-            decreaseButton[i].addEventListener("click", (event) => {
+            decreaseButton[i].addEventListener('click', (event) => {
                 const id = event.target.dataset.productId;
                 if (cart[id] > 1) {
                     cart[id]--;
                     allQty--;
                     totalQty.innerText = `(${allQty})`;
                     updateCart(cart, categoryProducts);
-                }
-                else {
+                } else {
                     delete cart[id];
                     allQty--;
                     totalQty.innerText = `(${allQty})`;
                     updateCart(cart, categoryProducts);
                 }
-          });
+            });
         }
-    }      
+    }
 
     increaseAmount();
     decreaseAmount();
