@@ -9,37 +9,39 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <nav>
-            <ul>
-                <li>
-                    <img src="images/ruander-logo.png" alt="ruander-logo" id="logo">
-                </li>
-                <li>
-                    <a href="#" id="categories">Categories</a>
-                    <aside id="categoriesContent">
-                        <div id="categoriesContainer"></div>
-                    </aside>
-                </li>
-                <li>
-                    <button id="miniCartButton">cart <span id="totalQty">(0)</span></button>
-                </li>
-            </ul>
-        </nav>
+        <div class="nav container">
+            <nav>
+                <ul>
+                    <li>
+                        <img src="images/ruander-logo.png" alt="ruander-logo" class="logo">
+                    </li>
+                    <li>
+                        <a href="#" id="categories">Categories</a>
+                        <aside id="categoriesContent">
+                            <div id="categoriesContainer"></div>
+                        </aside>
+                    </li>
+                    <li>
+                        <div id="miniCartButton"><img src="images/cart.png" id="cart-icon" alt="cart icon" class="logo"><span id="totalQty">0</span></div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <aside id="miniCartContent">
         <h2>Items in cart</h2>
         <hr>
-        <button id="miniCartClose"><img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-512.png" alt="close icon"></button>
+        <img id="miniCartClose" src="images/close.png" alt="close icon">
         <div id="miniCartProducts"></div> 
         <p id="miniCartTotal"></p>
     </aside>
 
-    <main>
-        <div id="productContainer">
-            <div id="productInfo"></div>
-        </div>
+    <!-- Shop -->
+    <main class="container">
+        <div id="productContainer"></div>
     </main>
 
     <footer>
