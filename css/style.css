@@ -286,7 +286,7 @@ main{
     font-weight: 400px;
     margin-bottom: 0.5rem;
     width: 300px;
-    height: 100px;
+    height: 15%;
     overflow: hidden;
     margin: auto;
 }
@@ -320,32 +320,34 @@ main{
     margin: auto;
 }
 
-.clickedItem .productImg{
+.productImg{
+    object-fit: cover;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
-    width: 100%;
-    padding: 5px;
-    transition: 0.4s;
-}
-
-.clickedItem .productImg:hover{
+    height: 100%;
     padding: 0px;
     transition: 0.4s;
 }
 
-.clickedItem .productTitle{
+.productImg:hover{
+    padding: 10px;
+    transition: 0.4s;
+}
+
+.productTitle{
+    margin-top: 10px;
     font-size: 1.1rem;
     font-weight: 600;
     text-transform: uppercase;
 }
 
-.clickedItem .productDesc{
+.productDesc{
     font-size: 1rem;
     font-weight: 400px;
     margin-bottom: 1rem;
 }
 
-.clickedItem .price{
+.price{
     font-weight: 600;
 }
 
@@ -369,7 +371,9 @@ footer{
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
     z-index: 80;
     text-align: center;
-    margin-top: auto;
+    position: fixed;
+    bottom: 0;
+    left: 0;
 }
 
 footer p{
