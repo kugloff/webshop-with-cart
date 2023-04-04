@@ -12,22 +12,31 @@ const categoriesContainer = document.getElementById('categoriesContainer');
 const productContainer = document.getElementById('productContainer');
 
 let allQty = 0;
-let cart = [];
+const cart = {};
 
 navCategories.addEventListener('click', () => {
     categoriesContent.classList.toggle('active');
 })
 
-fetch('https://dummyjson.com/products?limit=5')
+fetch('https://dummyjson.com/products/categories')
     .then(res => res.json())
     .then(data => {
-        products = data.products;
-        data.products.forEach(product => {
-            cart['productId'] = product.id;
-            cart.productId.product = product;
-            cart.productId.quantity = 0;
+        data.forEach(category=>{
+            fetch(`https://dummyjson.com/products/category/${category}`)
+            .then(res => res.json())
+            .then(data => {
+                products = data.products;
+                data.products.forEach(product => {
+                    cart[product.id] = {
+                        product: product,
+                        quantity: 0
+                    }
+                })
+            })
         })
-    }) 
+    })
+    .catch(error => console.log(error));
+    console.log(cart)
 
 fetch('https://dummyjson.com/products/categories')
     .then(res => res.json())
@@ -55,9 +64,11 @@ fetch('https://dummyjson.com/products/categories')
                             </div>`
                     })
                     
-                    data.products.forEach(product => {
-                        const productItem = document.getElementsByClassName('item');
-                        productItem.addEventListener('click', ()=>{
+                    const productImages = document.getElementsByClassName('productImg');
+                    for (let i = 0; i < productImages.length; i++) {
+                        const product = data.products[i];
+                        const productItem = productImages[i];
+                        productItem.addEventListener('click', () => {
                             productContainer.innerHTML =
                             `<div class="clickedItem">
                                 <figure style="height=200px"><img src=${product.images[0]} alt=${product.title}></figure>
@@ -66,24 +77,24 @@ fetch('https://dummyjson.com/products/categories')
                                 <div class="price">${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</div>
                                 <button class="addToCartBtn" data-product-id="${product.id}">Add to cart</button>
                             </div>`
-                        })
-                    })
+                        });
+                    }
+
 
                     let addToCartButtons = document.getElementsByClassName('addToCartBtn');
                     for (const button of addToCartButtons) {
                         button.addEventListener('click', (event) => {
                             const productId = event.target.dataset.productId;
-                            console.log(cart[1].product)
-                            if (cart[productId]) {
+                            if (cart[productId] && cart[productId].quantity > 0) {
                                 cart[productId].quantity++;
                             } else {
-                                cart[productId] = { product: cart[productId].products.find(p => p.id === productId), quantity: 1 };
-                            }
+                                cart[productId] = { product: cart[productId]?.product, quantity: 1 };
+                            }                            
                             allQty++;
                             totalQty.innerText = `${allQty}`;
                             updateCart();
                         });
-                    }        
+                    }
                 })
             })
         })             
@@ -92,7 +103,7 @@ fetch('https://dummyjson.com/products/categories')
     
 
 function increaseAmount() {
-    const increaseButton = document.getElementsByClassName('increase-button');
+    const increaseButton = document.getElementsByClassName('increaseButton');
     for (let i = 0; i < increaseButton.length; i++) {
         increaseButton[i].addEventListener('click', (event) => {
             const id = event.target.dataset.productId;
@@ -105,19 +116,18 @@ function increaseAmount() {
 }
 
 function decreaseAmount() {
-    const decreaseButton = document.getElementsByClassName('decrease-button');
+    const decreaseButton = document.getElementsByClassName('decreaseButton');
     for (let i = 0; i < decreaseButton.length; i++) {
         decreaseButton[i].addEventListener('click', (event) => {
             const id = event.target.dataset.productId;
             if (cart[id].quantity > 1) {
                 cart[id].quantity--;
                 allQty--;
-                totalQty.innerText = `(${allQty})`;
+                totalQty.innerText = `${allQty}`;
                 updateCart();
             } else {
-                delete cart[id];
                 allQty--;
-                totalQty.innerText = `(${allQty})`;
+                totalQty.innerText = `${allQty}`;
                 updateCart();
             }
         });
@@ -128,34 +138,52 @@ function updateCart() {
     miniCartProducts.innerHTML = '';
     let total = 0;
     let subTotal = 0;
-    let price = 0;
-    let title = "";
       
     for (const id in cart) {
-        console.log(cart, cart[id], cart[id].product);
         const product = cart[id].product;
-        const quantity = cart[id].quantity;
-        price = cart[id].product.price;
-        title = product.title;
-        subTotal = price * quantity;
-        total += subTotal;
+        let quantity = cart[id].quantity;
     
-        miniCartProducts.innerHTML +=
-            `<div class="item" data-product-id="${id}">
-                <h2>${title}</h2>
-                <p>Price: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(price)}</p>
-                <p>Subtotal: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(subTotal)}</p>
-                <button class="increase-button" data-product-id="${id}"> + </button> 
-                <span class="quantity">${quantity}</span>
-                <button class="decrease-button" data-product-id="${id}"> - </button> 
-                <hr>
-            </div>`;
+        if (quantity > 0) {
+            subTotal = product.price * quantity;
+            total += subTotal;
+    
+            miniCartProducts.innerHTML +=
+                `<div class="cartItem" data-product-id="${id}">
+                    <figure><img src="${product.images[0]}" alt="${product.title}"></figure>
+                    <div class="cartItemDetails">
+                        <h4>${product.title}</h4>
+                        <p>Quantity: ${quantity}</p>
+                        <p>Price: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</p>
+                        <button class="decreaseButton" data-product-id="${id}">-</button>
+                        <span class="quantity">${quantity}</span>
+                        <button class="increaseButton" data-product-id="${id}">+</button>
+                    </div>
+                </div>`;
+        }
+        else{
+            removeProduct(product.id)
+        }
     }    
       
     miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
     increaseAmount();
     decreaseAmount();
 }
+
+function removeProduct(productId){
+    const productElement = document.querySelector(`.cartItem[data-product-id="${productId}"]`);
+    const product = cart[productId];
+    if (product && product.quantity > 0) {
+        product.quantity--;
+        allQty--;
+        totalQty.innerText = `${allQty}`;
+        updateCart();
+    }
+    if (product.quantity === 0) {
+      productElement.remove();
+    }
+};
+  
       
 
 miniCartButton.addEventListener('click', () => {
