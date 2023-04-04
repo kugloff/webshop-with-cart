@@ -58,7 +58,7 @@ fetch('https://dummyjson.com/products/categories')
                             `<div class="item">
                                 <figure style="height=200px"><img src=${product.images[0]} alt=${product.title} class="productImg"></figure>
                                 <h3 class="productTitle">${product.title}</h3>
-                                <p>${product.description}</p>
+                                <p class="productDesc">${product.description}</p>
                                 <div class="price">${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</div>
                                 <button class="addToCartBtn" data-product-id="${product.id}">Add to cart</button>
                             </div>`
@@ -71,11 +71,11 @@ fetch('https://dummyjson.com/products/categories')
                         productItem.addEventListener('click', () => {
                             productContainer.innerHTML =
                             `<div class="clickedItem">
-                                <figure style="height=200px"><img src=${product.images[0]} alt=${product.title}></figure>
+                                <figure style="height=200px"><img src=${product.images[0]} alt=${product.title} class="productImg"></figure>
                                 <h3 class="productTitle">${product.title}</h3>
                                 <p class="productDesc">${product.description}</p>
                                 <div class="price">${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</div>
-                                <button class="addToCartBtn" data-product-id="${product.id}">Add to cart</button>
+                                <button class="addToCartBtnProduct" data-product-id="${product.id}">Add to cart</button>
                             </div>`
                         });
                     }
@@ -95,6 +95,20 @@ fetch('https://dummyjson.com/products/categories')
                             updateCart();
                         });
                     }
+
+                    productContainer.addEventListener('click', (event) => {
+                        if (event.target.classList.contains('addToCartBtnProduct')) {
+                            const productId = event.target.dataset.productId;
+                            if (cart[productId] && cart[productId].quantity > 0) {
+                                cart[productId].quantity++;
+                            } else {
+                                cart[productId] = { product: cart[productId]?.product, quantity: 1 };
+                            }                            
+                            allQty++;
+                            totalQty.innerText = `${allQty}`;
+                            updateCart();
+                        }
+                    });                      
                 })
             })
         })             
@@ -161,9 +175,10 @@ function updateCart() {
                 `<div class="cartItem active" data-product-id="${id}">
                     <figure><img src="${product.images[0]}" alt="${product.title}"></figure>
                     <div class="cartItemDetails">
-                        <h4>${product.title}</h4>
-                        <p>Quantity: ${quantity}</p>
-                        <p>Price: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</p>
+                        <h4 class="cartProductTitle">${product.title}</h4>
+                        <p class="cartPrice">Price: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</p>
+                        <p class="cartSubtotal">Subtotal: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(subTotal)}</p>
+                        <span>Quantity:</span>
                         <button class="decreaseButton" data-product-id="${id}">-</button>
                         <span class="quantity">${quantity}</span>
                         <button class="increaseButton" data-product-id="${id}">+</button>
