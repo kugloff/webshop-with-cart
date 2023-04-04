@@ -76,8 +76,8 @@ header ul li{
 #categoriesContent{
     background-color: var(--bg-color);
     position: absolute;
-    top: 77px;
-    left: 170px;
+    top: 78px;
+    left: 10%;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
     width: 200px;
     padding: 5px 10px;
@@ -86,6 +86,7 @@ header ul li{
     color: var(--text-color);
     font-weight: 400;
     display: inline-block;
+    z-index: 100;
 }
 
 #categoriesContent.active{
@@ -143,6 +144,11 @@ header ul li{
     align-items: center;
     gap: 1rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cartItem.active{
+    visibility: visible;
 }
 
 .cartImg{

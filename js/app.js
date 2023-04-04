@@ -125,7 +125,15 @@ function decreaseAmount() {
                 allQty--;
                 totalQty.innerText = `${allQty}`;
                 updateCart();
-            } else {
+            }
+            else {
+                const cartItems = document.getElementsByClassName('cartItem');
+                for(const cartItem of cartItems){
+                    cartItem.addEventListener('click', ()=>{
+                        cartItem.classList.toggle('active');
+                    })
+                }
+                cart[id].quantity--;
                 allQty--;
                 totalQty.innerText = `${allQty}`;
                 updateCart();
@@ -138,8 +146,10 @@ function updateCart() {
     miniCartProducts.innerHTML = '';
     let total = 0;
     let subTotal = 0;
+    let cartId;
       
     for (const id in cart) {
+        cartId = cart[id];
         const product = cart[id].product;
         let quantity = cart[id].quantity;
     
@@ -148,7 +158,7 @@ function updateCart() {
             total += subTotal;
     
             miniCartProducts.innerHTML +=
-                `<div class="cartItem" data-product-id="${id}">
+                `<div class="cartItem active" data-product-id="${id}">
                     <figure><img src="${product.images[0]}" alt="${product.title}"></figure>
                     <div class="cartItemDetails">
                         <h4>${product.title}</h4>
@@ -158,33 +168,15 @@ function updateCart() {
                         <span class="quantity">${quantity}</span>
                         <button class="increaseButton" data-product-id="${id}">+</button>
                     </div>
-                </div>`;
-        }
-        else{
-            removeProduct(product.id)
+                </div>
+                <hr>`;
         }
     }    
       
     miniCartTotal.textContent = `Total: ${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(total)}`;
     increaseAmount();
     decreaseAmount();
-}
-
-function removeProduct(productId){
-    const productElement = document.querySelector(`.cartItem[data-product-id="${productId}"]`);
-    const product = cart[productId];
-    if (product && product.quantity > 0) {
-        product.quantity--;
-        allQty--;
-        totalQty.innerText = `${allQty}`;
-        updateCart();
-    }
-    if (product.quantity === 0) {
-      productElement.remove();
-    }
-};
-  
-      
+}    
 
 miniCartButton.addEventListener('click', () => {
     miniCartContent.classList.toggle('active');
