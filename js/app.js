@@ -79,9 +79,8 @@ fetch('https://dummyjson.com/products/categories')
                                 <div class="price">${new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(product.price)}</div>
                                 <button class="addToCartBtn" data-product-id="${product.id}">Add to cart</button>
                             </div>`
-                        })
                     })
-
+                    
                     const productImages = document.getElementsByClassName('productImg');
                     for (let i = 0; i < productImages.length; i++) {
                         const product = data.products[i];
@@ -98,6 +97,7 @@ fetch('https://dummyjson.com/products/categories')
                         });
                     }                  
                 })
+            })
         })             
     })
     .catch(error => console.log(error));
